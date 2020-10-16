@@ -7,6 +7,7 @@ import io.flutter.plugin.common.BasicMessageChannel;
 import io.flutter.plugin.common.BinaryMessenger;
 import io.flutter.plugin.common.StandardMessageCodec;
 import java.util.HashMap;
+import java.util.Map;
 
 /** Generated class from Pigeon. */
 @SuppressWarnings("unused")
@@ -44,6 +45,13 @@ public class Messages {
   /** Generated class from Pigeon that represents data sent in messages. */
   public static class CreateMessage {
     private String asset;
+    // private  rawMap;
+    private HashMap<String, String> headers;
+
+
+    public HashMap<String, String> getHeaders() {
+      return headers;
+    }
 
     public String getAsset() {
       return asset;
@@ -89,6 +97,7 @@ public class Messages {
       toMapResult.put("uri", uri);
       toMapResult.put("packageName", packageName);
       toMapResult.put("formatHint", formatHint);
+      toMapResult.put('headers', headers)
       return toMapResult;
     }
 
@@ -102,6 +111,8 @@ public class Messages {
       fromMapResult.packageName = (String) packageName;
       Object formatHint = map.get("formatHint");
       fromMapResult.formatHint = (String) formatHint;
+      Object headers = map.get('headers');
+      fromMapResult.headers = (Map<String, String>) headers;
       return fromMapResult;
     }
   }

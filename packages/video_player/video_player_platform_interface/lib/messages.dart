@@ -31,6 +31,7 @@ class CreateMessage {
   String uri;
   String packageName;
   String formatHint;
+  Map<String, String> headers;
   // ignore: unused_element
   Map<dynamic, dynamic> _toMap() {
     final Map<dynamic, dynamic> pigeonMap = <dynamic, dynamic>{};
@@ -38,6 +39,7 @@ class CreateMessage {
     pigeonMap['uri'] = uri;
     pigeonMap['packageName'] = packageName;
     pigeonMap['formatHint'] = formatHint;
+    pigeonMap['headers'] = headers;
     return pigeonMap;
   }
 
@@ -51,6 +53,7 @@ class CreateMessage {
     result.uri = pigeonMap['uri'];
     result.packageName = pigeonMap['packageName'];
     result.formatHint = pigeonMap['formatHint'];
+    result.headers = pigeonMap['headers'];
     return result;
   }
 }

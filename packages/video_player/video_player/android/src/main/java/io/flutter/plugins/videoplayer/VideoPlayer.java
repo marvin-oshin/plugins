@@ -87,7 +87,7 @@ final class VideoPlayer {
               DefaultHttpDataSource.DEFAULT_READ_TIMEOUT_MILLIS,
               true);
       if(httpHeaders!=null) {
-        httpDataSourceFactory.getDefaultRequestProperties().set(httpHeaders);
+        dataSourceFactory.getDefaultRequestProperties().set(httpHeaders);
       }
     } else {
       dataSourceFactory = new DefaultDataSourceFactory(context, "ExoPlayer");
