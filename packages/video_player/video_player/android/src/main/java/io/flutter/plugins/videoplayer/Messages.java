@@ -53,6 +53,10 @@ public class Messages {
       return headers;
     }
 
+    public void setHeaders(HashMap<String, String> setterArg) {
+      this.headers = setterArg;
+    }
+
     public String getAsset() {
       return asset;
     }

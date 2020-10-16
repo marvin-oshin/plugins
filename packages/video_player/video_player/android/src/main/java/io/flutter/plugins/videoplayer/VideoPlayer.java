@@ -141,7 +141,7 @@ final class VideoPlayer {
                 null,
                 DefaultHttpDataSource.DEFAULT_CONNECT_TIMEOUT_MILLIS,
                 DefaultHttpDataSource.DEFAULT_READ_TIMEOUT_MILLIS,
-                true
+                true,
                 httpHeaders
               );
       }else {
