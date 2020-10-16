@@ -46,7 +46,9 @@ int64_t FLTCMTimeToMillis(CMTime time) {
 @property(nonatomic, readonly) bool isPlaying;
 @property(nonatomic) bool isLooping;
 @property(nonatomic, readonly) bool isInitialized;
-- (instancetype)initWithURL:(NSURL*)url frameUpdater:(FLTFrameUpdater*)frameUpdater;
+- (instancetype)initWithURL:(NSURL*)url
+               frameUpdater:(FLTFrameUpdater*)frameUpdater
+                httpHeaders:(NSDictionary<NSString*, NSString*>*)headers;
 - (void)play;
 - (void)pause;
 - (void)setIsLooping:(bool)isLooping;
@@ -62,7 +64,8 @@ static void* playbackBufferFullContext = &playbackBufferFullContext;
 @implementation FLTVideoPlayer
 - (instancetype)initWithAsset:(NSString*)asset frameUpdater:(FLTFrameUpdater*)frameUpdater {
   NSString* path = [[NSBundle mainBundle] pathForResource:asset ofType:nil];
-  return [self initWithURL:[NSURL fileURLWithPath:path] frameUpdater:frameUpdater];
+  // return [self initWithURL:[NSURL fileURLWithPath:path] frameUpdater:frameUpdater];
+  return [self initWithURL:[NSURL fileURLWithPath:path] frameUpdater:frameUpdater httpHeaders:nil];
 }
 
 - (void)addObservers:(AVPlayerItem*)item {
@@ -161,9 +164,15 @@ static inline CGFloat radiansToDegrees(CGFloat radians) {
   [_displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSRunLoopCommonModes];
   _displayLink.paused = YES;
 }
-
-- (instancetype)initWithURL:(NSURL*)url frameUpdater:(FLTFrameUpdater*)frameUpdater {
-  AVPlayerItem* item = [AVPlayerItem playerItemWithURL:url];
+ - (instancetype)initWithURL:(NSURL*)url
+               frameUpdater:(FLTFrameUpdater*)frameUpdater
+                httpHeaders:(NSDictionary<NSString*, NSString*>*)headers {
+  NSDictionary<NSString*, id>* options = nil;
+  if (headers != (NSDictionary<NSString*, NSString*>*)[NSNull null]) {
+    options = @{@"AVURLAssetHTTPHeaderFieldsKey" : headers};
+  }
+  AVURLAsset* urlAsset = [AVURLAsset URLAssetWithURL:url options:options];
+  AVPlayerItem* item = [AVPlayerItem playerItemWithAsset:urlAsset];
   return [self initWithPlayerItem:item frameUpdater:frameUpdater];
 }
 
@@ -521,8 +530,10 @@ static inline CGFloat radiansToDegrees(CGFloat radians) {
     player = [[FLTVideoPlayer alloc] initWithAsset:assetPath frameUpdater:frameUpdater];
     return [self onPlayerSetup:player frameUpdater:frameUpdater];
   } else if (input.uri) {
+    NSDictionary* httpHeaders = argsMap[@"httpHeaders"];
     player = [[FLTVideoPlayer alloc] initWithURL:[NSURL URLWithString:input.uri]
-                                    frameUpdater:frameUpdater];
+                                    frameUpdater:frameUpdater
+                                    frameUpdater:httpHeaders];
     return [self onPlayerSetup:player frameUpdater:frameUpdater];
   } else {
     *error = [FlutterError errorWithCode:@"video_player" message:@"not implemented" details:nil];

@@ -140,6 +140,9 @@ public class VideoPlayerPlugin implements FlutterPlugin, VideoPlayerApi {
               options);
       videoPlayers.put(handle.id(), player);
     } else {
+      @SuppressWarnings("unchecked")
+      Map<String, String> httpHeaders = call.argument("httpHeaders");
+      
       player =
           new VideoPlayer(
               flutterState.applicationContext,
@@ -147,7 +150,8 @@ public class VideoPlayerPlugin implements FlutterPlugin, VideoPlayerApi {
               handle,
               arg.getUri(),
               arg.getFormatHint(),
-              options);
+              options,
+              httpHeaders);
       videoPlayers.put(handle.id(), player);
     }
 

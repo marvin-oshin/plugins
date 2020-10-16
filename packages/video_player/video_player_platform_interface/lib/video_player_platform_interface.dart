@@ -145,13 +145,13 @@ class DataSource {
   ///
   /// The [package] argument must be non-null when the asset comes from a
   /// package and null otherwise.
-  DataSource({
-    @required this.sourceType,
-    this.uri,
-    this.formatHint,
-    this.asset,
-    this.package,
-  });
+  DataSource(
+      {@required this.sourceType,
+      this.uri,
+      this.formatHint,
+      this.asset,
+      this.package,
+      this.headers});
 
   /// The way in which the video was originally loaded.
   ///
@@ -175,6 +175,9 @@ class DataSource {
   /// The package that the asset was loaded from. Only set for
   /// [DataSourceType.asset] videos.
   final String package;
+
+  //specify http headers
+  Map<String, String> httpHeaders;
 }
 
 /// The way in which the video was originally loaded.

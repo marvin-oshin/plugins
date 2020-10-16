@@ -188,7 +188,10 @@ class VideoPlayerController extends ValueNotifier<VideoPlayerValue> {
   /// **Android only**: The [formatHint] option allows the caller to override
   /// the video format detection code.
   VideoPlayerController.network(this.dataSource,
-      {this.formatHint, this.closedCaptionFile, this.videoPlayerOptions})
+      {this.formatHint,
+      this.closedCaptionFile,
+      this.videoPlayerOptions,
+      this.httpHeaders})
       : dataSourceType = DataSourceType.network,
         package = null,
         super(VideoPlayerValue(duration: null));
@@ -221,6 +224,7 @@ class VideoPlayerController extends ValueNotifier<VideoPlayerValue> {
 
   /// Provide additional configuration options (optional). Like setting the audio mode to mix
   final VideoPlayerOptions videoPlayerOptions;
+  Map<String, String> httpHeaders;
 
   /// Only set for [asset] videos. The package that the asset was loaded from.
   final String package;
@@ -261,10 +265,10 @@ class VideoPlayerController extends ValueNotifier<VideoPlayerValue> {
         break;
       case DataSourceType.network:
         dataSourceDescription = DataSource(
-          sourceType: DataSourceType.network,
-          uri: dataSource,
-          formatHint: formatHint,
-        );
+            sourceType: DataSourceType.network,
+            uri: dataSource,
+            formatHint: formatHint,
+            httpHeaders: httpHeaders);
         break;
       case DataSourceType.file:
         dataSourceDescription = DataSource(
