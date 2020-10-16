@@ -97,7 +97,7 @@ public class Messages {
       toMapResult.put("uri", uri);
       toMapResult.put("packageName", packageName);
       toMapResult.put("formatHint", formatHint);
-      toMapResult.put('headers', headers)
+      toMapResult.put("headers", headers)
       return toMapResult;
     }
 
@@ -111,7 +111,7 @@ public class Messages {
       fromMapResult.packageName = (String) packageName;
       Object formatHint = map.get("formatHint");
       fromMapResult.formatHint = (String) formatHint;
-      Object headers = map.get('headers');
+      Object headers = map.get("headers");
       fromMapResult.headers = (Map<String, String>) headers;
       return fromMapResult;
     }
