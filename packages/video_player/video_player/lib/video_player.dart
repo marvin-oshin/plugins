@@ -268,7 +268,7 @@ class VideoPlayerController extends ValueNotifier<VideoPlayerValue> {
             sourceType: DataSourceType.network,
             uri: dataSource,
             formatHint: formatHint,
-            httpHeaders: httpHeaders);
+            headers: httpHeaders);
         break;
       case DataSourceType.file:
         dataSourceDescription = DataSource(
