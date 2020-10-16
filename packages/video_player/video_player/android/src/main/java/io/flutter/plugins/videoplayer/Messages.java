@@ -112,6 +112,7 @@ public class Messages {
       Object formatHint = map.get("formatHint");
       fromMapResult.formatHint = (String) formatHint;
       Object headers = map.get("headers");
+      @SuppressWarnings("unchecked")
       fromMapResult.headers = (HashMap<String, String>) headers;
       return fromMapResult;
     }

@@ -38,6 +38,60 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import android.support.annotation.Nullable;
+import com.google.android.exoplayer2.upstream.HttpDataSource.BaseFactory;
+import com.google.android.exoplayer2.upstream.HttpDataSource.RequestProperties;
+import com.google.android.exoplayer2.upstream.TransferListener;
+
+
+private static class VideoPlayerHttpDataSourceFactory extends BaseFactory {
+    private final String userAgent;
+    private final @Nullable TransferListener listener;
+    private final int connectTimeoutMillis;
+    private final int readTimeoutMillis;
+    private final boolean allowCrossProtocolRedirects;
+    private final Map<String, String> headers;
+
+    public VideoPlayerHttpDataSourceFactory(
+        String userAgent,
+        @Nullable TransferListener listener,
+        int connectTimeoutMillis,
+        int readTimeoutMillis,
+        boolean allowCrossProtocolRedirects,
+        Map<String, String> headers) {
+      this.userAgent = userAgent;
+      this.listener = listener;
+      this.connectTimeoutMillis = connectTimeoutMillis;
+      this.readTimeoutMillis = readTimeoutMillis;
+      this.allowCrossProtocolRedirects = allowCrossProtocolRedirects;
+      this.headers = headers;
+    }
+
+    @Override
+    protected DefaultHttpDataSource createDataSourceInternal(
+        RequestProperties defaultRequestProperties) {
+      if (this.headers != null) {
+        if (defaultRequestProperties == null) {
+          defaultRequestProperties = new RequestProperties();
+        }
+        for (Map.Entry<String, String> header : this.headers.entrySet()) {
+          defaultRequestProperties.set(header.getKey(), header.getValue());
+        }
+      }
+      DefaultHttpDataSource dataSource =
+          new DefaultHttpDataSource(
+              userAgent,
+              /* contentTypePredicate= */ null,
+              connectTimeoutMillis,
+              readTimeoutMillis,
+              allowCrossProtocolRedirects,
+              defaultRequestProperties);
+      if (listener != null) {
+        dataSource.addTransferListener(listener);
+      }
+      return dataSource;
+    }
+  }
 
 final class VideoPlayer {
   private static final String FORMAT_SS = "ss";
@@ -79,15 +133,27 @@ final class VideoPlayer {
 
     DataSource.Factory dataSourceFactory;
     if (isHTTP(uri)) {
-      dataSourceFactory =
+      
+      if(httpHeaders!=null) {
+        dataSourceFactory =
+          new VideoPlayerHttpDataSourceFactory(
+                "ExoPlayer",
+                null,
+                DefaultHttpDataSource.DEFAULT_CONNECT_TIMEOUT_MILLIS,
+                DefaultHttpDataSource.DEFAULT_READ_TIMEOUT_MILLIS,
+                true
+                httpHeaders
+              );
+      }else {
+        dataSourceFactory =
           new DefaultHttpDataSourceFactory(
               "ExoPlayer",
               null,
               DefaultHttpDataSource.DEFAULT_CONNECT_TIMEOUT_MILLIS,
               DefaultHttpDataSource.DEFAULT_READ_TIMEOUT_MILLIS,
-              true);
-      if(httpHeaders!=null) {
-        dataSourceFactory.getDefaultRequestProperties().set(httpHeaders);
+              true
+              
+              );
       }
     } else {
       dataSourceFactory = new DefaultDataSourceFactory(context, "ExoPlayer");
