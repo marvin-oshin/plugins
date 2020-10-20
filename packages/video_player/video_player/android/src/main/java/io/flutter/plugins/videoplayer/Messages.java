@@ -105,6 +105,7 @@ public class Messages {
       return toMapResult;
     }
 
+    @SuppressWarnings("unchecked")
     static CreateMessage fromMap(HashMap map) {
       CreateMessage fromMapResult = new CreateMessage();
       Object asset = map.get("asset");
@@ -116,8 +117,9 @@ public class Messages {
       Object formatHint = map.get("formatHint");
       fromMapResult.formatHint = (String) formatHint;
       Object headers = map.get("headers");
-      @SuppressWarnings("unchecked")
-      fromMapResult.headers = (HashMap<String, String>) headers;
+      // @SuppressWarnings("unchecked")
+      HashMap mapHeaders = (HashMap) headers;
+      fromMapResult.headers = mapHeaders;
       return fromMapResult;
     }
   }
