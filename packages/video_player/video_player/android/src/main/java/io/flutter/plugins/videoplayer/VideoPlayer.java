@@ -38,15 +38,17 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import android.support.annotation.Nullable;
 import com.google.android.exoplayer2.upstream.HttpDataSource.BaseFactory;
 import com.google.android.exoplayer2.upstream.HttpDataSource.RequestProperties;
 import com.google.android.exoplayer2.upstream.TransferListener;
 
 
+
+final class VideoPlayer {
+  
 private static class VideoPlayerHttpDataSourceFactory extends BaseFactory {
     private final String userAgent;
-    private final @Nullable TransferListener listener;
+    private final TransferListener listener;
     private final int connectTimeoutMillis;
     private final int readTimeoutMillis;
     private final boolean allowCrossProtocolRedirects;
@@ -54,7 +56,7 @@ private static class VideoPlayerHttpDataSourceFactory extends BaseFactory {
 
     public VideoPlayerHttpDataSourceFactory(
         String userAgent,
-        @Nullable TransferListener listener,
+        TransferListener listener,
         int connectTimeoutMillis,
         int readTimeoutMillis,
         boolean allowCrossProtocolRedirects,
@@ -92,8 +94,6 @@ private static class VideoPlayerHttpDataSourceFactory extends BaseFactory {
       return dataSource;
     }
   }
-
-final class VideoPlayer {
   private static final String FORMAT_SS = "ss";
   private static final String FORMAT_DASH = "dash";
   private static final String FORMAT_HLS = "hls";
